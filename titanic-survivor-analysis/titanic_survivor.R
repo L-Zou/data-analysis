@@ -71,7 +71,8 @@ ggplot(data = full[1:dim(train)[1],][!(is.na(full[1:dim(train)[1],]$Age)),]
 full$Passenger_Fare <- full$Fare / full$Shared_Tickets
 
 # Therefore, the relevant variables are:
-# Pclass, Sex, Age, Family_Size, Share_Tickets, Passenger_Fare
+# Pclass, Sex, Age, Family_Size, "Title", Share_Tickets, Passenger_Fare
+# Age is unnecessary since Title contains similar information  
 
 # Generate C5.0 Decision Tree Model===============
 # Create training and test dataset
@@ -79,7 +80,7 @@ train <- filter(full, !(is.na(Survived)))
 test <- filter(full, is.na(Survived))
 
 # Generating model
-C5.0_model <- C5.0(train[, c("Pclass", "Age", "Family_Size", "Sex", "Title", 
+C5.0_model <- C5.0(train[, c("Pclass", "Family_Size", "Sex", "Title", 
                              "Shared_Tickets", "Passenger_Fare")], train[, "Survived"])
 
 # Prediction===============
@@ -88,5 +89,5 @@ test$Survived <- predict(C5.0_model, test)
 # Submission===============
 submit <- data.frame(PassengerId = test$PassengerId, Survived = test$Survived)
 write.csv(submit,"Submission.csv",row.names=FALSE)
-# Final accuracy score: 0.79425
+# Final accuracy score: 0.80382
 
